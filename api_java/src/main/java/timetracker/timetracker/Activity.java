@@ -23,4 +23,6 @@ class Activity {
   private String windowtitle;
   private Long duration; // milliseconds
 
+
+
 }

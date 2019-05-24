@@ -14,7 +14,7 @@ public class ApiController {
 		this.repository = repository;
 	}
 
-	@RequestMapping("/hello")
+	@RequestMapping("/")
 	public String hello() {
 		return "hello";
 	}
