@@ -11,21 +11,17 @@ namespace TrackWinDaemon {
         private TrackedWindow(string appName, string windowTitle) {
             AppName = appName;
             WindowTitle = windowTitle;
-            StartTime = (long) DateTime.UtcNow.Subtract(_1970).TotalMilliseconds;
+            StartTime = DateTime.UtcNow;
+//            StartTime = (long) DateTime.UtcNow.Subtract(_1970).TotalMilliseconds;
         }
 
         public string AppName { get; set; }
         public string WindowTitle { get; set; }
-        public long StartTime { get; set; }
+        public DateTime StartTime { get; set; }
 //        public object AdditionalInformation { get; set; }
 
-
-        public DateTime StartTimeAsDate() {
-            return _1970.Add(TimeSpan.FromMilliseconds(StartTime)).ToLocalTime();
-        }
-
         public override string ToString() {
-            return $"{nameof(AppName)}: {AppName}, {nameof(WindowTitle)}: {WindowTitle}, {nameof(StartTime)}: {StartTimeAsDate()}";
+            return $"{nameof(AppName)}: {AppName}, {nameof(WindowTitle)}: {WindowTitle}, {nameof(StartTime)}: {StartTime}";
         }
 
         public static TrackedWindow From(Process p, string windowTitle) {
