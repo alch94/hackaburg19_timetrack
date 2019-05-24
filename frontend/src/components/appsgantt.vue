@@ -12,6 +12,7 @@
         <div class="q-mt-md" />
         <q-btn @click="addTask" icon="mdi-plus" label="Add task" />
         <q-btn @click="loadActivities" icon="mdi-plus" label="Load Tasks" />
+        <q-btn @click="insertTestData" icon="mdi-plus" label="Testdaten einfuegen" />
     </q-page>
 </template>
 
@@ -143,6 +144,8 @@
     };
 
     import {API} from '../axios'
+    import {TESTDATA} from './testData'
+
     export default {
         name: "Gantt",
         components: {
@@ -170,7 +173,7 @@
                 //     percent: 50,
                 //     type: "project"
                 // });
-                API.post(`activity`)
+                API.post(`activity`);
             },
             tasksUpdate(tasks) {
                 this.tasks = tasks;
@@ -182,17 +185,58 @@
                 this.dynamicStyle = style;
             },
             loadActivities: function () {
-                this.loading = true;
-                API.get(`activities`)
-                    .then((response)  =>  {
-                        this.loading = false;
-                        console.log(response.data);
-                        this.tasks.push(response.data);
-                    }, (error)  =>  {
-                        // eslint-disable-next-line no-console
-                        console.log(error);
-                        this.loading = false;
-                    })
+                // this.loading = true;
+
+                API.get('activities').then(response => {
+                    console.log(response);
+                    response.data.forEach(elem => {
+                        this.tasks.push({
+                            id: elem.id,
+                            label: elem.exename + " - " + elem.windowtitle,
+                            user: '<a href="https://images.pexels.com/photos/423364/pexels-photo-423364.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" target="_blank" style="color:#0077c0;">' + elem.user + '</a>',
+                            start: elem.starttime,
+                            duration: 0,
+                            percent: 50,
+                            type: "project"
+                        });
+                    });
+                }).catch(err => {
+                    console.log(err);
+                });
+                // API.get('activities')
+                //     .then(function (response)  {
+                //         console.log('test');
+                //         this.loading = false;
+                //         // console.log(response.data);
+                //         this.tasks.push(response.data);
+                //     }).catch(function(error) {
+                //         // eslint-disable-next-line no-console
+                //         console.log(error);
+                //         this.loading = false;
+                //     });
+            },
+            insertTestData: function () {
+                API.get('deleteall').then(response => {
+                    console.log('Deleted!');
+                    TESTDATA.forEach(elem => {
+                        API.post('/activity', {
+                            "userid": elem.userid,
+                            "deviceid": elem.deviceid,
+                            "starttime": elem.starttime,
+                            "endtime": elem.endtime,
+                            "ostype": elem.ostype,
+                            "exename": elem.exename,
+                            "windowtitle": elem.windowtitle,
+                            "duration": elem.duration
+                        }).then(response => {
+                            console.log(response);
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                    });
+                }).catch(err => {
+                    console.log(err);
+                });
             }
         }
     };
