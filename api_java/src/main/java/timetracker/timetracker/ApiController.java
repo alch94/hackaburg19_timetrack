@@ -19,6 +19,7 @@ public class ApiController {
 		return "hello";
 	}
 
+	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping("/activities")
     List<Activity> all() {
 		return repository.findAll();
