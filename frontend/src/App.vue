@@ -1,31 +1,92 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <chart></chart>
-  </div>
+  <q-layout id="q-app" view="lHh Lpr lFf">
+    <q-layout-header>
+      <q-toolbar
+        color="primary"
+        :glossy="$q.theme === 'mat'"
+        :inverted="$q.theme === 'ios'"
+      >
+        <q-btn
+          flat
+          dense
+          round
+          @click="leftDrawerOpen = !leftDrawerOpen"
+          aria-label="Menu"
+          icon="menu"
+        />
+
+        <q-toolbar-title>
+          Quasar App
+          <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-layout-header>
+
+    <q-layout-drawer
+      v-model="leftDrawerOpen"
+      :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
+    >
+      <q-list
+        no-border
+        link
+        inset-delimiter
+      >
+        <q-list no-border link inset-delimiter>
+          <q-list-header>Essential Links</q-list-header>
+          <q-item to="/">
+            <q-item-side icon="school" />
+            <q-item-section>
+              <q-item-label>Demo</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item to="/info">
+            <q-item-side icon="school" />
+            <q-item-section>
+              <q-item-label>Documentation</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-list-header>Essential Links</q-list-header>
+          <q-item @click.native="openURL('http://quasar-framework.org')">
+            <q-item-side icon="school" />
+            <q-item-main label="Docs" sublabel="quasar-framework.org"></q-item-main>
+          </q-item>
+          <q-item @click.native="openURL('https://discord.gg/5TDhbDg')">
+            <q-item-side icon="chat" />
+            <q-item-main label="Discord Chat Channel" sublabel="https://discord.gg/5TDhbDg"></q-item-main>
+          </q-item>
+          <q-item @click.native="openURL('http://forum.quasar-framework.org')">
+            <q-item-side icon="forum" />
+            <q-item-main label="Forum" sublabel="forum.quasar-framework.org"></q-item-main>
+          </q-item>
+          <q-item @click.native="openURL('https://twitter.com/quasarframework')">
+            <q-item-side icon="rss feed" />
+            <q-item-main label="Twitter" sublabel="@quasarframework"></q-item-main>
+          </q-item>
+        </q-list>
+      </q-list>
+    </q-layout-drawer>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import chart from './components/chart.vue'
+import { openURL } from 'quasar'
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld,
-    chart
+  name: 'LayoutDefault',
+  data () {
+    return {
+      leftDrawerOpen: this.$q.platform.is.desktop
+    }
+  },
+  methods: {
+    openURL
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
