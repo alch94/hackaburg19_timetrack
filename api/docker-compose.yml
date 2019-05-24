@@ -1,18 +1,22 @@
-version: '3.3'
+#Use root/example as user/password credentials
+version: '3.1'
 
 services:
-   db:
-     image: mysql:5.7
-     volumes:
-       - db_data:/var/lib/mysql
-     restart: always
-     network_mode: host
-     environment:
-       MYSQL_ROOT_PASSWORD: hack
-       MYSQL_DATABASE: hack 
-       MYSQL_USER: hack
-       MYSQL_PASSWORD: hack
-     ports:
-        - "3306:3306"
-volumes:
-    db_data: {}
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
