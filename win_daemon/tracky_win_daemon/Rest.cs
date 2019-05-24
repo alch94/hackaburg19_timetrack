@@ -58,7 +58,7 @@ namespace TrackWinDaemon.Rest {
                 exename = window.AppName,
                 windowtitle = window.WindowTitle
             };
-            Console.WriteLine(o);
+            Console.WriteLine("Sending: " + o);
             request.AddJsonBody(o);
         }
 
