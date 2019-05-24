@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - db_data:/var/lib/mysql
+     restart: always
+     network_mode: host
+     environment:
+       MYSQL_ROOT_PASSWORD: hack
+       MYSQL_DATABASE: hack 
+       MYSQL_USER: hack
+       MYSQL_PASSWORD: hack
+     ports:
+        - "3306:3306"
+volumes:
+    db_data: {}
