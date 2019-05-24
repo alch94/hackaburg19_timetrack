@@ -1,8 +1,6 @@
 package timetracker.timetracker;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 import org.apache.tomcat.jni.Local;
@@ -20,6 +18,7 @@ class Activity {
   private LocalDateTime endtime;
   private String ostype;
   private String exename;
+  @Column(length = 1000)
   private String windowtitle;
   private Long duration; // milliseconds
 

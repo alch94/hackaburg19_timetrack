@@ -4,13 +4,16 @@ using System.Windows.Forms;
 
 namespace TrackWinDaemon {
     public partial class MainForm : Form {
+        private Rest.Rest rest;
         private WindowTracker windowTracker;
 
         public MainForm() {
             InitializeComponent();
+            rest = new Rest.Rest();
             windowTracker = new WindowTracker();
             windowTracker.OnNewTrackedWindow += (sender, args) => {
-                Console.Out.WriteLine("# Tracked: {0}", args.trackedWindow.ToString());
+//                Console.Out.WriteLine("# Tracked: {0}", args.trackedWindow.ToString());
+                rest.send(args.trackedWindow);
             };
             if (listen.Checked) {
                 windowTracker.StartListening();
