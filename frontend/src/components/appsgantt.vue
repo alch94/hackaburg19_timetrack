@@ -11,8 +11,8 @@
         </gantt-elastic>
         <div class="q-mt-md" />
         <q-btn @click="addTask" icon="mdi-plus" label="Add task" />
-        <q-btn @click="loadActivities" icon="mdi-plus" label="Load Tasks" />
-        <q-btn @click="insertTestData" icon="mdi-plus" label="Testdaten einfuegen" />
+        <q-btn :loading="loading" @click="loadActivities" icon="mdi-plus" label="Load Tasks" />
+        <q-btn :loading="loading" @click="insertTestData" icon="mdi-plus" label="Testdaten einfuegen" />
     </q-page>
 </template>
 
@@ -169,7 +169,8 @@
                 tasks,
                 options,
                 dynamicStyle: {},
-                lastId: 16
+                lastId: 16,
+                loading: false,
             };
         },
         methods: {
@@ -237,6 +238,7 @@
                 //     });
             },
             insertTestData: function () {
+                this.loading = true;
                 API.get('deleteall').then(response => {
                     console.log('Deleted!');
                     TESTDATA.forEach(elem => {
@@ -255,6 +257,15 @@
                             console.log(err);
                         });
                     });
+                    Promise.all(promisses).then(value => {
+                        console.log(value);
+                        this.loading = false;
+                    }).catch(err => {
+                        console.log(err);
+                        this.loading = false;
+                    });
+                }).then(val => {
+                    console.log(val);
                 }).catch(err => {
                     console.log(err);
                 });
