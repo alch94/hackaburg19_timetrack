@@ -146,6 +146,18 @@
     import {API} from '../axios'
     import {TESTDATA} from './testData'
 
+    var colors = new Array("#FF0000", "#00FF00", "#0000FF", "#000000", "#FFFF00", "#00FFFF", "#FF00FF", "#FFFFFF");
+    var dict = new Object();
+
+    function getColorByName(name) {
+        if (dict[name]) {
+            return dict[name];
+        } else {
+            dict[name] = colors[Math.floor(Math.random() * 7)];
+            return dict[name];
+        }
+    }
+
     export default {
         name: "Gantt",
         components: {
@@ -189,17 +201,26 @@
 
                 API.get('activities').then(response => {
                     console.log(response);
-                    response.data.forEach(elem => {
-                        this.tasks.push({
-                            id: elem.id,
-                            label: elem.exename + " - " + elem.windowtitle,
-                            user: '<a href="https://images.pexels.com/photos/423364/pexels-photo-423364.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" target="_blank" style="color:#0077c0;">' + elem.user + '</a>',
-                            start: elem.starttime,
-                            duration: 0,
-                            percent: 50,
-                            type: "project"
+                    if (Array.isArray(response.data) && response.data.length) {
+                        this.tasks.splice(0, this.tasks.length);
+                        response.data.forEach(elem => {
+                            this.tasks.push({
+                                id: elem.id,
+                                label: elem.exename + " - " + elem.windowtitle,
+                                user: '<a href="https://images.pexels.com/photos/423364/pexels-photo-423364.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" target="_blank" style="color:#0077c0;">' + elem.user + '</a>',
+                                start: elem.starttime,
+                                duration: elem.duration * 1000,
+                                percent: 100,
+                                type: "project",
+                                style: {
+                                    base: {
+                                        fill: getColorByName(elem.exename),
+                                        stroke: getColorByName(elem.exename)
+                                    }
+                                }
+                            });
                         });
-                    });
+                    }
                 }).catch(err => {
                     console.log(err);
                 });
