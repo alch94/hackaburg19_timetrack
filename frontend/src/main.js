@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueWorker from 'vue-worker';
 import App from './App.vue';
 // import AppExample from './AppExample.vue';
 import Gantt from './components/appsgantt.vue';
@@ -7,6 +8,7 @@ import appstable from './components/appstable';
 
 import Router from 'vue-router';
 Vue.use(Router);
+Vue.use(VueWorker);
 
 const router = new Router({
   routes: [

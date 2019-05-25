@@ -19,7 +19,8 @@
     "quasar-framework": "^0.17.0",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.4.2",
-    "vue-router": "^3.0.6"
+    "vue-router": "^3.0.6",
+    "vue-worker": "^1.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",
