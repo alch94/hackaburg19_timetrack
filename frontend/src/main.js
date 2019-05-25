@@ -2,8 +2,10 @@ import Vue from 'vue';
 import App from './App.vue';
 // import AppExample from './AppExample.vue';
 import Gantt from './components/appsgantt.vue';
+import gantttest from './components/gantt.vue';
 import Info from './components/Info.vue';
 import appstable from './components/appstable';
+import durationbarchart from './components/durationbarchart';
 
 import Router from 'vue-router';
 Vue.use(Router);
@@ -15,12 +17,20 @@ const router = new Router({
       component: Gantt
     },
     {
-      path: '/Info',
+      path: '/info',
       component: Info
     },
     {
       path: '/table',
       component: appstable
+    },
+    {
+      path: '/g',
+      component: gantttest
+    },
+    {
+      path: '/durationbarchart',
+      component: durationbarchart
     }
   ]
 });
@@ -64,6 +74,10 @@ Vue.use(Quasar, {
   directives: {},
   plugins: {},
 });
+
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 
 Vue.config.productionTip = false;
 
