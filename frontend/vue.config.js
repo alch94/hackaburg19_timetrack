@@ -3,7 +3,10 @@ module.exports = {
     quasar: {
       theme: 'mat',
       importAll: true,
-      treeShake: true
+      treeShake: true,
+      framework: {
+        directives: ['Ripple']
+      }
     }
   },
   transpileDependencies: [
