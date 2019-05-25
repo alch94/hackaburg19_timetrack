@@ -199,32 +199,45 @@
             },
             loadActivities: function () {
                 // this.loading = true;
-
+                this.loading = true;
                 API.get('activities').then(response => {
                     console.log(response);
                     if (Array.isArray(response.data) && response.data.length) {
                         this.tasks.splice(0, this.tasks.length);
+                        var promisses = new Array();
                         response.data.forEach(elem => {
-                            this.tasks.push({
-                                id: elem.id,
-                                label: elem.exename + " - " + elem.windowtitle,
-                                user: '<a href="https://images.pexels.com/photos/423364/pexels-photo-423364.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" target="_blank" style="color:#0077c0;">' + elem.user + '</a>',
-                                start: elem.starttime,
-                                duration: elem.duration * 1000,
-                                percent: 100,
-                                type: "project",
-                                style: {
-                                    base: {
-                                        fill: getColorByName(elem.exename),
-                                        stroke: getColorByName(elem.exename)
+                            promisses.push(new Promise((resolve, reject) => {
+                                this.tasks.push({
+                                    id: elem.id,
+                                    label: elem.exename + " - " + elem.windowtitle,
+                                    user: '<a href="https://images.pexels.com/photos/423364/pexels-photo-423364.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" target="_blank" style="color:#0077c0;">' + elem.user + '</a>',
+                                    start: elem.starttime,
+                                    duration: elem.duration * 1000,
+                                    percent: 100,
+                                    type: "project",
+                                    style: {
+                                        base: {
+                                            fill: getColorByName(elem.exename),
+                                            stroke: getColorByName(elem.exename)
+                                        }
                                     }
-                                }
-                            });
+                                });
+                                resolve();
+                            }));
                         });
+                        Promise.all(promisses).then(response => {
+                            console.log(response);
+                            this.loading = false;
+                        }).catch(err => {
+                            console.log(err);
+                            this.loading = false;
+                        })
                     }
                 }).catch(err => {
+                    this.loading = false;
                     console.log(err);
                 });
+
                 // API.get('activities')
                 //     .then(function (response)  {
                 //         console.log('test');
@@ -241,21 +254,27 @@
                 this.loading = true;
                 API.get('deleteall').then(response => {
                     console.log('Deleted!');
+                    var promisses = new Array();
                     TESTDATA.forEach(elem => {
-                        API.post('/activity', {
-                            "userid": elem.userid,
-                            "deviceid": elem.deviceid,
-                            "starttime": elem.starttime,
-                            "endtime": elem.endtime,
-                            "ostype": elem.ostype,
-                            "exename": elem.exename,
-                            "windowtitle": elem.windowtitle,
-                            "duration": elem.duration
-                        }).then(response => {
-                            console.log(response);
-                        }).catch(err => {
-                            console.log(err);
-                        });
+                        promisses.push(new Promise(function(resolve, reject) {
+                            API.post('/activity', {
+                                "userid": elem.userid,
+                                "deviceid": elem.deviceid,
+                                "starttime": elem.starttime,
+                                "endtime": elem.endtime,
+                                "ostype": elem.ostype,
+                                "exename": elem.exename,
+                                "windowtitle": elem.windowtitle,
+                                "duration": elem.duration
+                            }).then(response => {
+                                console.log(response);
+                                resolve(response);
+                            }).catch(err => {
+                                console.log(err);
+                                this.loading = false;
+                                reject(err);
+                            });
+                        }));
                     });
                     Promise.all(promisses).then(value => {
                         console.log(value);
