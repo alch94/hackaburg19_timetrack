@@ -49,6 +49,15 @@ class MainActivity : AppCompatActivity() {
             intent.action = MyForeGroundService.ACTION_START_FOREGROUND_SERVICE
             startService(intent)
         }
+
+
+        btn_sop.setOnClickListener{view ->
+            val intent = Intent(this@MainActivity, MyForeGroundService::class.java)
+            intent.action = MyForeGroundService.ACTION_STOP_FOREGROUND_SERVICE
+            startService(intent)
+        }
+
+
     }
 
 

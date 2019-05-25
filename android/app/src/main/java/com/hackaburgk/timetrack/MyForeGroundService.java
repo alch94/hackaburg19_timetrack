@@ -32,6 +32,7 @@ import java.util.TreeMap;
 
 public class MyForeGroundService extends Service {
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
+    public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
     private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
     private final String USER_ID = "markusmoe";
     private final String DEVICE_ID = "android1";
@@ -138,16 +139,23 @@ public class MyForeGroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
-        startForegroundService();
+        String action = intent.getAction();
+        switch (action) {
+            case ACTION_STOP_FOREGROUND_SERVICE:
+                stopForegroundService();
+                Toast.makeText(getApplicationContext(), "Foreground service is stopped.", Toast.LENGTH_LONG).show();
+                break;
+            case ACTION_START_FOREGROUND_SERVICE:
+            Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
+            startForegroundService();
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateTask();
-            }
-        }, 10000, 10000);
-
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    updateTask();
+                }
+            }, 10000, 10000);
+        }
         return START_STICKY;
 
     }
@@ -195,7 +203,7 @@ public class MyForeGroundService extends Service {
 
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle("Time tracking service by an awesome Hackaburg team!");
+        bigTextStyle.setBigContentTitle("Time tracking service is currently running!");
         bigTextStyle.bigText("This is the notification for our awesome time tracking software tracky!");
         // Set big text style.
         builder.setStyle(bigTextStyle);
