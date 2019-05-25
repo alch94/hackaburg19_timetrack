@@ -88,6 +88,10 @@
         },
         maxRows: 100,
         maxHeight: 500,
+        scope: {
+            before: 0,
+            after: 0
+        },
         title: {
             label: "Your project title as html (link or whatever...)",
             html: false
@@ -97,7 +101,7 @@
         },
         times: {
             timeScale: 1000,
-            timeZoom: 17,
+            timeZoom: 15,
         },
         calendar: {
             hour: {
@@ -119,15 +123,21 @@
             columns: [
                 {
                     id: 1,
-                    label: "ID",
-                    value: "id",
-                    width: 40
+                    label: "User",
+                    value: "userid",
+                    width: 80
                 },
                 {
                     id: 2,
+                    label: "Device",
+                    value: "deviceid",
+                    width: 80
+                },
+                {
+                    id: 3,
                     label: "Description",
                     value: "label",
-                    width: 200,
+                    width: 100,
                     expander: true,
                     // html: true,
                     // events: {
@@ -229,7 +239,8 @@
                     this.tasks.push({
                         id: elem.id,
                         label: elem.exename + winTitle,
-                        user: elem.user,
+                        userid: elem.userid,
+                        deviceid: elem.deviceid,
                         start: new Date(...elem.starttime),
                         duration: elem.duration * 1000,
                         percent: 100,
