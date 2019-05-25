@@ -164,6 +164,13 @@
             GanttElastic,
             GanttHeader
         },
+        mounted() {
+            this.loadActivities();
+            setInterval(function () {
+                this.loadActivities();
+                console.log("Load Activities Periodically");
+            }.bind(this), 1000);
+        },
         data() {
             return {
                 tasks,
