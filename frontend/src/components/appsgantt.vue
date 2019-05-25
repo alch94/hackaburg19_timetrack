@@ -22,7 +22,7 @@
 <script>
     import GanttElastic from "gantt-elastic";
     import GanttHeader from "gantt-elastic-header";
-    // import dayjs from "dayjs";
+    import dayjs from "dayjs";
 
     // just helper to get current dates
     function getDate(hours) {
@@ -40,7 +40,7 @@
         ).getTime();
         return new Date(timeStamp + hours * 60 * 60 * 1000).getTime();
     }
-    let tasks = [
+    let tasksInital = [
         {
             id: 2,
             label: "With great power comes great responsibility",
@@ -97,7 +97,7 @@
         },
         times: {
             timeScale: 1000,
-            timeZoom: 17, //*
+            timeZoom: 17,
         },
         calendar: {
             hour: {
@@ -118,17 +118,23 @@
             },
             columns: [
                 {
+                    id: 1,
+                    label: "ID",
+                    value: "id",
+                    width: 40
+                },
+                {
                     id: 2,
                     label: "Description",
-                    value: "windowtitle",
+                    value: "label",
                     width: 200,
                     expander: true,
                     // html: true,
-                    events: {
-                        click({ data, column }) {
-                            alert("description clicked!\n" + data.label + column);
-                        }
-                    }
+                    // events: {
+                    //     click({ data, column }) {
+                    //         alert("description clicked!\n" + data.label + column);
+                    //     }
+                    // }
                 }
             ]
         },
@@ -166,14 +172,14 @@
         },
         mounted() {
             this.loadActivities();
-            setInterval(function () {
-                this.loadActivities();
-                console.log("Load Activities Periodically");
-            }.bind(this), 1000);
+            // setInterval(function () {
+            //     this.loadActivities();
+            //     console.log("Load Activities Periodically");
+            // }.bind(this), 1000);
         },
         data() {
             return {
-                tasks,
+                tasks: tasksInital,
                 options,
                 dynamicStyle: {},
                 lastId: 16,
@@ -193,7 +199,7 @@
                 //     percent: 50,
                 //     type: "project"
                 // });
-                API.post(`activity`);
+                // API.post(`activity`);
             },
             tasksUpdate(tasks) {
                 this.tasks = tasks;
@@ -204,46 +210,39 @@
             styleUpdate(style) {
                 this.dynamicStyle = style;
             },
-            loadActivities: function () {
+            loadActivities: async function () {
                 // this.loading = true;
                 this.loading = true;
-                API.get('activities').then(response => {
-                    console.log(response);
-                    if (Array.isArray(response.data) && response.data.length) {
-                        this.tasks.splice(0, this.tasks.length);
-                        var promisses = new Array();
-                        response.data.forEach(elem => {
-                            promisses.push(new Promise((resolve, reject) => {
-                                this.tasks.push({
-                                    id: elem.id,
-                                    label: elem.exename + " - " + elem.windowtitle,
-                                    user: '<a href="https://images.pexels.com/photos/423364/pexels-photo-423364.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" target="_blank" style="color:#0077c0;">' + elem.user + '</a>',
-                                    start: elem.starttime,
-                                    duration: elem.duration * 1000,
-                                    percent: 100,
-                                    type: "project",
-                                    style: {
-                                        base: {
-                                            fill: getColorByName(elem.exename),
-                                            stroke: getColorByName(elem.exename)
-                                        }
-                                    }
-                                });
-                                resolve();
-                            }));
-                        });
-                        Promise.all(promisses).then(response => {
-                            console.log(response);
-                            this.loading = false;
-                        }).catch(err => {
-                            console.log(err);
-                            this.loading = false;
-                        })
+                var response = await API.get('activities');
+                if (!(Array.isArray(response.data) && response.data.length)) {
+                    return;
+                }
+                this.tasks.splice(0, this.tasks.length);
+                // let slice = response.data.slice(0, 50);
+                for (const elem of response.data) {
+                    console.log(elem);
+                    if (elem.starttime == null || elem.duration == null || elem.duration <= 60) {
+                        continue;
                     }
-                }).catch(err => {
-                    this.loading = false;
-                    console.log(err);
-                });
+
+                    var winTitle = elem.windowtitle == null ? "" : " - " + elem.windowtitle;
+                    this.tasks.push({
+                        id: elem.id,
+                        label: elem.exename + winTitle,
+                        user: elem.user,
+                        start: new Date(...elem.starttime),
+                        duration: elem.duration * 1000,
+                        percent: 100,
+                        type: "project",
+                        style: {
+                            base: {
+                                fill: getColorByName(elem.exename),
+                                stroke: getColorByName(elem.exename)
+                            }
+                        }
+                    });
+                }
+                this.loading = false;
 
                 // API.get('activities')
                 //     .then(function (response)  {
