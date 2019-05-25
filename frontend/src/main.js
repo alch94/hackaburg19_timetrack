@@ -3,6 +3,7 @@ import App from './App.vue';
 // import AppExample from './AppExample.vue';
 import Gantt from './components/appsgantt.vue';
 import Info from './components/Info.vue';
+import appstable from './components/appstable';
 
 import Router from 'vue-router';
 Vue.use(Router);
@@ -16,6 +17,10 @@ const router = new Router({
     {
       path: '/Info',
       component: Info
+    },
+    {
+      path: '/table',
+      component: appstable
     }
   ]
 });

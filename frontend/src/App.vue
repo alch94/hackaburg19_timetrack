@@ -3,8 +3,6 @@
     <q-layout-header>
       <q-toolbar
         color="primary"
-        :glossy="$q.theme === 'mat'"
-        :inverted="$q.theme === 'ios'"
       >
         <q-btn
           flat
@@ -15,10 +13,10 @@
           icon="menu"
         />
 
-        <q-toolbar-title>
-          Quasar App
-          <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
-        </q-toolbar-title>
+<!--        <q-toolbar-title>-->
+<!--          Quasar App-->
+<!--          <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>-->
+<!--        </q-toolbar-title>-->
       </q-toolbar>
     </q-layout-header>
 
@@ -43,6 +41,12 @@
             <q-item-side icon="school" />
             <q-item-section>
               <q-item-label>Documentation</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item to="/table">
+            <q-item-side icon="school" />
+            <q-item-section>
+              <q-item-label>Table</q-item-label>
             </q-item-section>
           </q-item>
           <q-list-header>Essential Links</q-list-header>
@@ -79,6 +83,7 @@ export default {
   name: 'LayoutDefault',
   data () {
     return {
+      // leftDrawerOpen: false
       leftDrawerOpen: this.$q.platform.is.desktop
     }
   },
