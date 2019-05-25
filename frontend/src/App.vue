@@ -31,7 +31,7 @@
       >
         <q-list no-border link inset-delimiter>
           <q-list-header>Essential Links</q-list-header>
-          <q-item to="/">
+          <q-item to="/demo">
             <q-item-side icon="android"/>
             <q-item-label>Demo</q-item-label>
           </q-item>

@@ -13,7 +13,7 @@ Vue.use(Router);
 const router = new Router({
   routes: [
     {
-      path: '/',
+      path: '/demo',
       component: Gantt
     },
     {
