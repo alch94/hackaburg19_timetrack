@@ -54,6 +54,10 @@
         },
         mounted() {
             this.fillData();
+            setInterval(function () {
+                this.fillData();
+                console.log("Load Activities Periodically");
+            }.bind(this), 3000);
         },
         methods: {
             chartTypeChanged() {
@@ -68,19 +72,25 @@
                 this.fillData();
             },
             async fillData() {
-                var newData = [];
-                var newX = [];
-
                 var newArr = await a.getGroupedBy(this.separator);
+                var newNewArr = [];
                 for (var prop in newArr) {
                     if (newArr[prop] != null) {
                         var newDur = newArr[prop].reduce((rv, x) => {
-                            return rv + x.duration;
+                            return rv + (x.duration != null ? x.duration : 0);
                         }, 0);
-                        newData.push(newDur);
-                        newX.push(prop);
+                        newArr["newDur"] = newDur;
+                        newNewArr.push({"key": prop, "newDur": newDur});
                     }
                 }
+                var newData = [];
+                var newX = [];
+                newNewArr.sort((a,b) => a.newDur - b.newDur);
+                for (let p in newNewArr) {
+                    newData.push(newNewArr[p].newDur);
+                    newX.push(newNewArr[p].key);
+                }
+
                 // Make sure to update the whole options config and not just a single property to allow the Vue watch catch the change.
                 this.chartOptions = {
                     xaxis: {

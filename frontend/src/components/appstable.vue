@@ -63,7 +63,7 @@
     export default {
         data: () => ({
             loading: false,
-            paginationControl: {rowsPerPage: 50, page: 1},
+            paginationControl: {rowsPerPage: 100, page: 1},
             columns: [
                 {
                     name: 'userid',
