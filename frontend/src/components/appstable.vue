@@ -86,7 +86,8 @@
                     label: 'OS',
                     align: 'left',
                     field: 'ostype',
-                    sortable: true
+                    sortable: true,
+                    // format: val => val.toLowerCase().startsWith("w") ?
                 },
                 {
                     name: 'exename',
@@ -144,6 +145,7 @@
         methods: {
             loadActivities: function () {
                 this.loading = true;
+                this.tableData = [];
                 API.get('activities').then(response => {
                     // console.log(response);
                     response.data.forEach(elem => {
