@@ -224,7 +224,7 @@
                     if (elem.starttime == null || elem.duration == null || elem.duration <= 60) {
                         continue;
                     }
-
+                    elem.starttime[6] = 0;
                     var winTitle = elem.windowtitle == null ? "" : " - " + elem.windowtitle;
                     this.tasks.push({
                         id: elem.id,
